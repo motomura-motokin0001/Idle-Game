@@ -15,6 +15,10 @@ public class PlanetUI : MonoBehaviour
     [SerializeField] private Button ascensionButton; // 惑星個別のアセンションボタン
     [SerializeField] private TextMeshProUGUI ascensionTargetText; // 「目標Lv: 100」などの表示用
 
+    [Header("Debug")]
+    [SerializeField]
+    private string D_targetLevel;
+
     void Start()
     {
         //購入ボタンのイベント登録

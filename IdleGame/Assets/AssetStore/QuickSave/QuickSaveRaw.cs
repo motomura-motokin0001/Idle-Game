@@ -106,11 +106,11 @@ namespace CI.QuickSave
         /// <param name="path">The file to delete</param>
         public static void Delete(string path) => FileAccess.Delete(path);
 
-        /// <summary>
-        /// Determines if the specified file exists
-        /// </summary>
-        /// <param name="path">The file to check</param>
-        /// <returns>Does the file exist</returns>
+        ///<summary>
+        ///指定されたファイルが存在するかどうかを判断します
+        ///</summary>
+        ///<param name="path">確認するファイル</param>
+        ///<returns>ファイルは存在しますか</returns>
         public static bool Exists(string path) => FileAccess.Exists(path);
 
         /// <summary>

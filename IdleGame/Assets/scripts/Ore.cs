@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class Ore : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
-    }
+        /*TODOスタートでしてほしいこと
+        ・セーブデータからの情報を取得
+        ・UIの更新
+        ・ログイン表示
+        */
 
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

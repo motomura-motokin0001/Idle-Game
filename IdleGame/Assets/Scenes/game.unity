@@ -1312,21 +1312,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370c623eff3671f4cbc317d2c58e27fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  BPD_List:
-  - {fileID: 11400000, guid: aef7855e5c4b87b41806842db97104b7, type: 2}
-  - {fileID: 11400000, guid: c191320633b942a41b928a989d64179a, type: 2}
-  - {fileID: 11400000, guid: 6fdd2103bb13d1f439eb8dbb7857f65d, type: 2}
-  - {fileID: 11400000, guid: a39b2511a3bca1948a75b87635b7ba99, type: 2}
-  - {fileID: 11400000, guid: 03bbe696f3bef824298d6d76b5d63842, type: 2}
-  - {fileID: 11400000, guid: b6b4a1fb3309e5d4c9881de1b7c5f9ef, type: 2}
-  - {fileID: 11400000, guid: 5cf0fedc4a434824bb1c4b9cd1606776, type: 2}
-  - {fileID: 11400000, guid: 86559d5bfda011442afed9af9c032936, type: 2}
-  currentScore: 0
-  totalScoreText: {fileID: 1229197136}
-  multiplierText: {fileID: 1406325278}
-  baseAscensionGoal: 50
-  levelIncrementPerAscension: 50
-  URTS: []
 --- !u!4 &568560462
 Transform:
   m_ObjectHideFlags: 0
@@ -1405,8 +1390,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 86559d5bfda011442afed9af9c032936, type: 2}
   URTS: []
   CurrentScore: 0
+  baseAscensionGoal: 100
   SCORE_Text: {fileID: 1229197136}
   Multiplier_Text: {fileID: 1406325278}
+  levelIncrementPerAscension: 10
+  notationType: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

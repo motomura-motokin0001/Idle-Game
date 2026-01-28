@@ -67,5 +67,7 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "IdleGame.slnx"
+    "dotnet.defaultSolution": "IdleGame.slnx",
+    "commentTranslate.browse.mode": "contrast",
+    "commentTranslate.hover.enabled": true
 }
