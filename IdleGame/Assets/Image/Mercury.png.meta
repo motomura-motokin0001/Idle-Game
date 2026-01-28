@@ -103,10 +103,10 @@ TextureImporter:
       name: Mercury_0
       rect:
         serializedVersion: 2
-        x: 176
-        y: 149
-        width: 211
-        height: 203
+        x: 0
+        y: 0
+        width: 500
+        height: 500
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

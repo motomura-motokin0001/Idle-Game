@@ -17,7 +17,7 @@ MonoBehaviour:
   Level: 0
   Base_Cost: 1000
   Cost_Multiplier: 1.2
-  Base_Speed: 0.2
+  Base_Speed: 0.02
   Base_Reward: 1
   Reward_Exponent_Add: 0.6
   Reward_Base_Value: 2

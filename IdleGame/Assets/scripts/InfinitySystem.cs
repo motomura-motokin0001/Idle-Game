@@ -34,9 +34,9 @@ public class UpgradeRuntimeStatus
     public double GetCurrentCost() => Base_Cost;
 }
 
-public class Infi : MonoBehaviour
+public class InfinitySystem : MonoBehaviour
 {
-    public static Infi instance;
+    public static InfinitySystem instance;
 
     [SerializeField]
     private List<BeginningPlanetData> BPD; // 各アップグレードのマスターデータリスト

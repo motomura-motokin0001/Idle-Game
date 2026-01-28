@@ -22,20 +22,20 @@ public class PlanetUI : MonoBehaviour
     void Start()
     {
         //購入ボタンのイベント登録
-        buyButton.onClick.AddListener(() => Infi.instance.BuyUpgrade(planetIndex));
+        buyButton.onClick.AddListener(() => InfinitySystem.instance.BuyUpgrade(planetIndex));
 
         // アセンションボタンのイベント登録
         if (ascensionButton != null)
         {
-            ascensionButton.onClick.AddListener(() => Infi.instance.PerformIndividualAscension(planetIndex));
+            ascensionButton.onClick.AddListener(() => InfinitySystem.instance.PerformIndividualAscension(planetIndex));
         }
     }
 
     void Update()
     {
-        if (Infi.instance == null || planetIndex >= Infi.instance.URTS.Count) return;
+        if (InfinitySystem.instance == null || planetIndex >= InfinitySystem.instance.URTS.Count) return;
         
-        var state = Infi.instance.URTS[planetIndex];
+        var state = InfinitySystem.instance.URTS[planetIndex];
 
         // ゲージと基本情報の更新
 
@@ -45,13 +45,14 @@ public class PlanetUI : MonoBehaviour
         levelText.text = $"Lv: {state.level} (Rank: {state.ascensionCount})";
         
         double cost = state.GetCurrentCost();
-        costText.text = "Cost: " + NumberFormatter.FormatNumber(cost,Infi.instance.notationType);
+        costText.text = "Cost: " + NumberFormatter.FormatNumber(cost,InfinitySystem.instance.notationType);
 
         // 購入ボタンの有効化判定
-        buyButton.interactable = Infi.instance.CurrentScore >= cost;
+        buyButton.interactable = InfinitySystem.instance.CurrentScore >= cost;
         if (state.Base_Speed >= 10.0)
         {
             fillImage.fillAmount = 1.0f;
+            
             return;
         }
         fillImage.fillAmount = (float)state.progress;
@@ -64,7 +65,7 @@ public class PlanetUI : MonoBehaviour
     {
         if (ascensionButton == null) return;
 
-        int targetLevel = Infi.instance.GetAscensionGoal(planetIndex);
+        int targetLevel = InfinitySystem.instance.GetAscensionGoal(planetIndex);
         
         // 目標レベルに達しているかチェック
         bool canAscend = state.level >= targetLevel;

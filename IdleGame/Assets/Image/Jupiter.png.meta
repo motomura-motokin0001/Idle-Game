@@ -103,10 +103,10 @@ TextureImporter:
       name: Jupiter_0
       rect:
         serializedVersion: 2
-        x: 132
-        y: 132
-        width: 236
-        height: 235
+        x: 0
+        y: 0
+        width: 500
+        height: 500
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
