@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Setting Table Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: Setting Table
+  m_TableCollectionNameGuidString: 98180d235e899f04b9ba8bea6d45d186
+  m_Entries:
+  - m_Id: 310081658880
+    m_Key: General
+    m_Metadata:
+      m_Items: []
+  - m_Id: 766489042944
+    m_Key: Display
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3072081174528
+    m_Key: Volume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3597245784064
+    m_Key: Music
+    m_Metadata:
+      m_Items: []
+  - m_Id: 3845280145408
+    m_Key: Sound
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2498827390315135382
+  references:
+    version: 2
+    RefIds:
+    - rid: 2498827390315135382
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1770971196904

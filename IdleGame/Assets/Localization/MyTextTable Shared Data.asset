@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: MyTextTable Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: MyTextTable
+  m_TableCollectionNameGuidString: 8ee67c19120d34c4baf0eaa9296c2b93
+  m_Entries:
+  - m_Id: 4555153514496
+    m_Key: COST_KEY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8839018487808
+    m_Key: RANK_KEY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12390201466880
+    m_Key: LEVEL_KEY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 871120150528
+    m_Key: Sun
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9710204788736
+    m_Key: Mercury
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9907890724864
+    m_Key: Venus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9979609128960
+    m_Key: Earth
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10051147177984
+    m_Key: Mars
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10273172660224
+    m_Key: Jupiter
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10477250715648
+    m_Key: Saturn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10639259901952
+    m_Key: Uranus
+    m_Metadata:
+      m_Items: []
+  - m_Id: 13708303441920
+    m_Key: Beginning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14697928499200
+    m_Key: Galaxy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 14926031527936
+    m_Key: Singularity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15270836871168
+    m_Key: Heresy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15884207693824
+    m_Key: HyperDrive
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16073425330176
+    m_Key: Achievement
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16381647953920
+    m_Key: Statistics
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16602448699392
+    m_Key: Setting
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 2498827390315135191
+  references:
+    version: 2
+    RefIds:
+    - rid: 2498827390315135191
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1770959607979
