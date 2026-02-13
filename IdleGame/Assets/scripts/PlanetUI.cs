@@ -27,7 +27,7 @@ public class PlanetUI : MonoBehaviour
         // アセンションボタンのイベント登録
         if (ascensionButton != null)
         {
-            ascensionButton.onClick.AddListener(() => InfinitySystem.instance.PerformIndividualAscension(planetIndex));
+            ascensionButton.onClick.AddListener(() => InfinitySystem.instance.Ascension(planetIndex));
         }
     }
 

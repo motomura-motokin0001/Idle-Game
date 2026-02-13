@@ -7,14 +7,14 @@ using UnityEngine;
 [System.Serializable]
 public class UpgradeRuntimeStatus
 {
-    public BeginningPlanetData data; // 設計図 (ScriptableObject等)
-    public int level;               // 購入数
-    public double progress;         // 進捗 (0.0 ～ 1.0)
-    public int ascensionCount;      // アセンションの数
-    public double Base_Reward;      // 現在の報酬量
-    public double Base_Speed;       // 回転速度
-    public double Base_Cost;        // 次のレベルのコスト
-    public double Cost_Multiplier;  // コストの増加倍率
+    public BeginningPlanetData data;            // 設計図 (ScriptableObject等)
+    public int level;                           // 購入数
+    public double progress;                     // 進捗 (0.0 ～ 1.0)
+    public int ascensionCount;                  // アセンションの数
+    public double Base_Score_Increase;          // 現在のスコア増加量
+    public double Base_Speed;                   // 回転速度
+    public double Base_Cost;                    // 次のレベルのコスト
+    public double Cost_Multiplier;              // コストの増加倍率
 
     public UpgradeRuntimeStatus(BeginningPlanetData masterData)
     {
@@ -22,7 +22,7 @@ public class UpgradeRuntimeStatus
         this.level = (int)masterData.Level;
         this.progress = 0;
         this.ascensionCount = 0;
-        this.Base_Reward = masterData.Base_Reward;
+        this.Base_Score_Increase = masterData.Base_Reward;
         this.Base_Speed = masterData.Base_Speed;
         
         // --- 修正ポイント：マスターデータから値をコピーする ---
@@ -55,6 +55,12 @@ public class InfinitySystem : MonoBehaviour
 
     public NotationType notationType;
 
+private UpgradeRuntimeStatus Getstatus(int index)
+{
+    if (index < 0 || index >= URTS.Count) return null;
+    return URTS[index];
+}
+
     void Awake()
     {
         if (instance == null)
@@ -81,6 +87,15 @@ public class InfinitySystem : MonoBehaviour
         }
     }
 
+private UpgradeRuntimeStatus GetStatus(int index)
+{
+    if (index >= 0 && index < URTS.Count)
+    {
+        return URTS[index];
+    }
+    return null;
+}
+
     void Update()
     {
         // スコア表示の更新
@@ -90,54 +105,51 @@ public class InfinitySystem : MonoBehaviour
         }
 
         // 各惑星の進捗更新
-        foreach (var planet in URTS)
+        foreach (var status in URTS)
         {
-            UpdatePlanetProgress(planet);
+            UpdatestatusProgress(status);
+        }
+
+        if(CurrentScore >= double.MaxValue)
+        {
+            //TODO 最大値に達成した際の処理
         }
     }
 
-
-    private void UpdatePlanetProgress(UpgradeRuntimeStatus planet)
+    private void UpdatestatusProgress(UpgradeRuntimeStatus status)//#Y 回転速度処理
     {
-        if (planet.level > 0)
+        if (status.level > 0)
         {
-            planet.progress += planet.Base_Speed *planet.level* Time.deltaTime;
+            status.progress += status.Base_Speed *status.level* Time.deltaTime;
 
-            if (planet.progress >= 1.0)
+            if (status.progress >= 1.0)
             {
                 // 進捗が1.0を超えたら報酬を加算
-                double reward = planet.Base_Reward;
+                double reward = status.Base_Score_Increase;
                 CurrentScore += reward;
 
-                planet.progress %= 1.0; // 余りを次に持ち越す
-                
-                // 報酬が変わる仕組み（Revolution Idle風にレベルアップでBase_Rewardを増やす等）があるならここでも表示更新
-                // UpdateMultiplierDisplay(); 
+                status.progress %= 1.0; // 余りを次に持ち越す
             }
         }
     }
 
-    public void BuyUpgrade(int index)
+    public void BuyUpgrade(int index)//#Y 
     {
         if (index < 0 || index >= URTS.Count) return;
 
-        var planet = URTS[index];
-        double cost = planet.Base_Cost;
+    var status = GetStatus(index);
+    if (status == null) return; // 統一された安全策
+        double cost = status.Base_Cost;
 
         if (CurrentScore >= cost)
         {
             // 購入処理
             CurrentScore -= cost; // ここで正常に引かれるようになります
             
-            planet.level++;
-            
-            // 次回のコストを計算して更新
-            planet.Base_Cost *= planet.Cost_Multiplier;
-
+            status.level++;
             // 例：購入時に報酬（生産量）を強化する場合
-            planet.Base_Speed += planet.Base_Speed; 
-
-            Debug.Log($"Index[{index}] 購入成功。残りスコア: {CurrentScore} 次回コスト: {planet.Base_Cost}");
+            status.Base_Speed += status.Base_Speed; 
+            Debug.Log($"Index[{index}] 購入成功。残りスコア: {CurrentScore} 次回コスト: {status.Base_Cost}");
         }
         else
         {
@@ -145,20 +157,22 @@ public class InfinitySystem : MonoBehaviour
         }
     }
 
-    public void PerformIndividualAscension(int index)
+    public void Ascension(int index)//再構築 処理
     {
-        if (index < 0 || index >= URTS.Count) return;
-        var planet = URTS[index];
+        var status = GetStatus(index);
+        if (status == null) return; // 統一された安全策
         int goal = GetAscensionGoal(index);
 
-        if (planet.level >= goal)
+        if (status.level <= goal)
         {
-            planet.ascensionCount++;
-            planet.level = (int)planet.data.Level;
-            planet.progress = 0;
-            Debug.Log($"{planet.data.Planet_Name} Ascended!");
+            status.ascensionCount++;
+            status.level = (int)5;
+            status.progress = 0;
+            status.Base_Cost = status.Base_Cost * Math.Pow(status.Cost_Multiplier + (status.level * 0.01), status.level);
+            Debug.Log($"{status.data.Planet_Name} Ascended!");
         }
     }
+
         public int GetAscensionGoal(int index) // #Yアセンション目標レベルの取得
     {
         if (index < 0 || index >= URTS.Count)
@@ -168,4 +182,5 @@ public class InfinitySystem : MonoBehaviour
 
         return baseAscensionGoal + (URTS[index].ascensionCount * levelIncrementPerAscension);
     }
-}
+
+}//TODO アセンション際のコストのリセットを実装

@@ -16,9 +16,7 @@ MonoBehaviour:
   Planet_ID: 0
   Level: 0
   Base_Cost: 7
-  Cost_Multiplier: 0.1
-  Base_Speed: 0.09
+  Cost_Multiplier: 1.05
+  Ascension_Multiplier: 1.5
+  Base_Speed: 0.1
   Base_Reward: 1
-  Reward_Exponent_Add: 0.05
-  Reward_Base_Value: 1.05
-  Ascension_Mult: 1.5
