@@ -35,6 +35,18 @@ MonoBehaviour:
     m_Key: Sound
     m_Metadata:
       m_Items: []
+  - m_Id: 1070069815717888
+    m_Key: Delete Data
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1070791751905280
+    m_Key: Quit the game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1074985368039424
+    m_Key: Credit
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

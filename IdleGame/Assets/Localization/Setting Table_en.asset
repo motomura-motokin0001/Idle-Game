@@ -38,6 +38,18 @@ MonoBehaviour:
     m_Localized: Sound
     m_Metadata:
       m_Items: []
+  - m_Id: 1070069815717888
+    m_Localized: Delete Data
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1070791751905280
+    m_Localized: Quit the game
+    m_Metadata:
+      m_Items: []
+  - m_Id: 1074985368039424
+    m_Localized: Credit
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
