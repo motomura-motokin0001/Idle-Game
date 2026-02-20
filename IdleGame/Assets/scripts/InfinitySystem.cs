@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Text;
 using System;
 using TMPro;
 using UnityEngine;
@@ -7,31 +6,44 @@ using UnityEngine;
 [System.Serializable]
 public class UpgradeRuntimeStatus
 {
-    public BeginningPlanetData data;            // 設計図 (ScriptableObject等)
-    public int level;                           // 購入数
+    public BeginningPlanetData data;            // 設計図
+    
+    // --- 実行時ステータス ---
+    public int level;                           // レベル（購入数）
+    public int ascensionCount;                  // アセンション回数
     public double progress;                     // 進捗 (0.0 ～ 1.0)
-    public int ascensionCount;                  // アセンションの数
-    public double Base_Score_Increase;          // 現在のスコア増加量
-    public double Base_Speed;                   // 回転速度
-    public double Base_Cost;                    // 次のレベルのコスト
-    public double Cost_Multiplier;              // コストの増加倍率
-
+    
+    // --- 計算によって決まる値 (RecalculateStatsでキャッシュ) ---
+    public double CurrentScoreIncrease;         // 報酬（1周あたり）
+    public double CurrentSpeed;                 // スピード（1秒あたりの回転数 RPS）
+    public double CurrentCost;                  // 次のレベルのコスト
+    
     public UpgradeRuntimeStatus(BeginningPlanetData masterData)
     {
         this.data = masterData;
-        this.level = (int)masterData.Level;
-        this.progress = 0;
+        this.level = 0; 
         this.ascensionCount = 0;
-        this.Base_Score_Increase = masterData.Base_Reward;
-        this.Base_Speed = masterData.Base_Speed;
-        
-        // --- 修正ポイント：マスターデータから値をコピーする ---
-        this.Base_Cost = masterData.Base_Cost;
-        this.Cost_Multiplier = masterData.Cost_Multiplier;
+        this.progress = 0;
+        RecalculateStats();
     }
 
-    // 現在のコストを計算して返す（Base_Costを直接書き換える運用なら不要ですが、ミス防止に役立ちます）
-    public double GetCurrentCost() => Base_Cost;
+    // ステータスの再計算処理
+    public void RecalculateStats()
+    {
+        // 1. コスト計算: 指数関数的に増加
+        CurrentCost = data.Base_Cost * Math.Pow(data.Cost_Multiplier, level);
+
+        // 2. 報酬計算: アセンションによって「基礎報酬」が強化される
+        // e308を目指すため、アセンション1回につき報酬を100倍にする
+        double ascensionBonus = Math.Pow(100.0, ascensionCount);
+        CurrentScoreIncrease = data.Base_Reward * ascensionBonus;
+
+        // 3. スピード計算: レベルアップ（購入）によって回転速度が上がる
+        // 例: 基礎スピード + (レベル * 0.1) 
+        // 0.1 RPS (10秒に1回) が 10レベルで 1.1 RPS (約0.9秒に1回) になる
+        double speedBonusPerLevel = 0.1; 
+        CurrentSpeed = data.Base_Speed + (level * speedBonusPerLevel);
+    }
 }
 
 public class InfinitySystem : MonoBehaviour
@@ -39,148 +51,150 @@ public class InfinitySystem : MonoBehaviour
     public static InfinitySystem instance;
 
     [SerializeField]
-    private List<BeginningPlanetData> BPD; // 各アップグレードのマスターデータリスト
+    private List<BeginningPlanetData> BPD; 
 
     public List<UpgradeRuntimeStatus> URTS = new List<UpgradeRuntimeStatus>();
 
     public double CurrentScore;
-    public int baseAscensionGoal = 100; // 初期のアセンションに必要なレベル
+    
+    [Header("Ascension Settings")]
+    public int baseAscensionGoal = 100;         // 最初のアセンションに必要なレベル
+    public int levelIncrementPerAscension = 25; // 次のアセンションまでの必要レベル増分
 
+    [Header("UI References")]
     [SerializeField]
-    private TextMeshProUGUI SCORE_Text; // 質量の合計値表示テキスト
-    [SerializeField]
-    private TextMeshProUGUI Multiplier_Text; // 質量の計算式表示テキスト
-    public int levelIncrementPerAscension = 10; // アセンションをした際の次回のアセンション増加量
-
+    private TextMeshProUGUI SCORE_Text; 
 
     public NotationType notationType;
 
-private UpgradeRuntimeStatus Getstatus(int index)
-{
-    if (index < 0 || index >= URTS.Count) return null;
-    return URTS[index];
-}
+    public TextMeshProUGUI Timer;
+	[SerializeField]
+	private int minute;
+	[SerializeField]
+	private float seconds;
+	//　前のUpdateの時の秒数
+	private float oldSeconds;
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (instance == null) { instance = this; }
+        else { Destroy(gameObject); return; }
 
-        // 実行用リストの初期化
+        InitializeGame();
+    }
+
+    void InitializeGame()
+    {
         URTS.Clear();
         foreach (var data in BPD)
         {
-            URTS.Add(new UpgradeRuntimeStatus(data));
+            var status = new UpgradeRuntimeStatus(data);
+            if (data.Level > 0) 
+            {
+                status.level = (int)data.Level;
+                status.RecalculateStats();
+            }
+            URTS.Add(status);
         }
 
-        // 初回起動時の初期スコア設定（最初の惑星が買える分だけ配布）
-        if (URTS.Count > 0 && CurrentScore <= 0)
+        if (CurrentScore <= 0 && URTS.Count > 0)
         {
-            CurrentScore = URTS[0].Base_Cost;
+            CurrentScore = URTS[0].CurrentCost;
         }
     }
 
-private UpgradeRuntimeStatus GetStatus(int index)
-{
-    if (index >= 0 && index < URTS.Count)
+    public UpgradeRuntimeStatus GetStatus(int index)
     {
-        return URTS[index];
+        if (index >= 0 && index < URTS.Count) return URTS[index];
+        return null;
     }
-    return null;
-}
 
     void Update()
     {
-        // スコア表示の更新
         if (SCORE_Text != null)
         {
-            SCORE_Text.SetText(NumberFormatter.FormatNumber(CurrentScore, notationType));
+            SCORE_Text.SetText($"{NumberFormatter.FormatNumber(CurrentScore, notationType)}");
         }
 
-        // 各惑星の進捗更新
+        if (CurrentScore >= double.MaxValue) 
+        {
+            SCORE_Text.SetText("INFINITY");
+        }
+        else
+        {
+            seconds += Time.deltaTime;
+            if(seconds >= 60f) 
+            {
+                minute++;
+                seconds = seconds - 60;
+            }
+            //　値が変わった時だけテキストUIを更新
+            if((int)seconds != (int)oldSeconds) 
+            {
+                Timer.text = minute.ToString("00") + ":" + ((int) seconds).ToString ("00");
+            }
+            oldSeconds = seconds;
+        }
+
         foreach (var status in URTS)
         {
-            UpdatestatusProgress(status);
-        }
+            if (status.level <= 0) continue;
 
-        if(CurrentScore >= double.MaxValue)
-        {
-            //TODO 最大値に達成した際の処理
-        }
-    }
-
-    private void UpdatestatusProgress(UpgradeRuntimeStatus status)//#Y 回転速度処理
-    {
-        if (status.level > 0)
-        {
-            status.progress += status.Base_Speed *status.level* Time.deltaTime;
+            // 回転進捗の更新
+            status.progress += status.CurrentSpeed * Time.deltaTime;
 
             if (status.progress >= 1.0)
             {
-                // 進捗が1.0を超えたら報酬を加算
-                double reward = status.Base_Score_Increase;
-                CurrentScore += reward;
-
-                status.progress %= 1.0; // 余りを次に持ち越す
+                double cycles = Math.Floor(status.progress);
+                CurrentScore += cycles * status.CurrentScoreIncrease;
+                status.progress -= cycles;
             }
         }
     }
 
-    public void BuyUpgrade(int index)//#Y 
-    {
-        if (index < 0 || index >= URTS.Count) return;
-
-    var status = GetStatus(index);
-    if (status == null) return; // 統一された安全策
-        double cost = status.Base_Cost;
-
-        if (CurrentScore >= cost)
-        {
-            // 購入処理
-            CurrentScore -= cost; // ここで正常に引かれるようになります
-            
-            status.level++;
-            // 例：購入時に報酬（生産量）を強化する場合
-            status.Base_Speed += status.Base_Speed; 
-            Debug.Log($"Index[{index}] 購入成功。残りスコア: {CurrentScore} 次回コスト: {status.Base_Cost}");
-        }
-        else
-        {
-            Debug.Log($"スコア不足: 必要 {cost} / 所持 {CurrentScore}");
-        }
-    }
-
-    public void Ascension(int index)//再構築 処理
+    // 購入処理：スピードが上がる
+    public void BuyUpgrade(int index)
     {
         var status = GetStatus(index);
-        if (status == null) return; // 統一された安全策
+        if (status == null) return;
+
+        if (CurrentScore >= status.CurrentCost)
+        {
+            CurrentScore -= status.CurrentCost;
+            status.level++;
+            status.RecalculateStats();
+            Debug.Log($"{status.data.Planet_Name} Level Up! Speed: {status.CurrentSpeed:F2} RPS");
+        }
+    }
+
+    // アセンション：報酬倍率が上がる
+    public void Ascension(int index)
+    {
+        var status = GetStatus(index);
+        if (status == null) return;
+
         int goal = GetAscensionGoal(index);
 
-        if (status.level <= goal)
+        if (status.level >= goal)
         {
             status.ascensionCount++;
-            status.level = (int)5;
+            
+            // アセンション後のリセット処理
+            status.level = 0; // スピードはリセットされるが報酬倍率が跳ね上がる
             status.progress = 0;
-            status.Base_Cost = status.Base_Cost * Math.Pow(status.Cost_Multiplier + (status.level * 0.01), status.level);
-            Debug.Log($"{status.data.Planet_Name} Ascended!");
+            status.RecalculateStats();
+
+            Debug.Log($"{status.data.Planet_Name} Ascended! New Reward: {status.CurrentScoreIncrease:E2}");
         }
     }
 
-        public int GetAscensionGoal(int index) // #Yアセンション目標レベルの取得
+    // 他スクリプトからも参照される判定用メソッド
+    public int GetAscensionGoal(int index)
     {
-        if (index < 0 || index >= URTS.Count)
-        {
-            return baseAscensionGoal;
-        }
+        var status = GetStatus(index);
+        if (status == null) return baseAscensionGoal;
 
-        return baseAscensionGoal + (URTS[index].ascensionCount * levelIncrementPerAscension);
+        // アセンション回数に応じて必要レベルを上げる
+        return baseAscensionGoal + (status.ascensionCount * levelIncrementPerAscension);
     }
-
-}//TODO アセンション際のコストのリセットを実装
+}

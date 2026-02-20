@@ -15,10 +15,8 @@ MonoBehaviour:
   Planet_Name: Mercury
   Planet_ID: 1
   Level: 0
-  Base_Cost: 500
-  Cost_Multiplier: 1.2
-  Base_Speed: 0.02
-  Base_Reward: 1
-  Reward_Exponent_Add: 0.4
-  Reward_Base_Value: 1.5
-  Ascension_Mult: 2
+  Base_Cost: 1000
+  Cost_Multiplier: 1.08
+  Base_Speed: 0.05
+  Ascension_Multiplier: 1
+  Base_Reward: 50

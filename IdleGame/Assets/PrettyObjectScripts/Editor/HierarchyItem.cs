@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 
@@ -55,3 +56,4 @@ public struct HierarchyItem
         IsHovered = BackgroundRect.Contains(Event.current.mousePosition);
     }
 }
+#endif

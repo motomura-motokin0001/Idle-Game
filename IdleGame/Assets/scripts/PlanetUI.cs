@@ -16,23 +16,23 @@ public class PlanetUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI ascensionTargetText;
 
     [Header("Localization")]
-    // テーブル内の「Cost」などのラベル用
+    // テーブル内のキーをインスペクターで指定（コードの初期値はバックアップ用）
     public LocalizedString costLabel = new LocalizedString { TableReference = "MyTextTable", TableEntryReference = "COST_KEY" };
-    // テーブル内の「Level」や「Rank」などのラベル用
     public LocalizedString levelLabel = new LocalizedString { TableReference = "MyTextTable", TableEntryReference = "LEVEL_KEY" };
-    public LocalizedString RankLabel = new LocalizedString { TableReference = "MyTextTable", TableEntryReference = "RANK_KEY" };
+    public LocalizedString rankLabel = new LocalizedString { TableReference = "MyTextTable", TableEntryReference = "RANK_KEY" };
 
-    private string currentCostLabel = "Cost"; // 翻訳されたラベルを保持
-    private string currentLevelLabel = "Lv";   // 翻訳されたラベルを保持
-    private string currentRankLabel =  "Rank";
+    private string currentCostLabel = "Cost";
+    private string currentLevelLabel = "Lv";
+    private string currentRankLabel = "Rank";
 
     void Start()
     {
         buyButton.onClick.AddListener(() => InfinitySystem.instance.BuyUpgrade(planetIndex));
 
-        // 言語が切り替わったときにラベルを更新するイベントを登録
-        costLabel.StringChanged += (value) => currentCostLabel = value;
-        levelLabel.StringChanged += (value) => currentLevelLabel = value;
+        // 翻訳テキストが更新された時のイベント登録
+        costLabel.StringChanged += (value) => currentCostLabel = string.IsNullOrEmpty(value) ? "Cost" : value;
+        levelLabel.StringChanged += (value) => currentLevelLabel = string.IsNullOrEmpty(value) ? "Lv" : value;
+        rankLabel.StringChanged += (value) => currentRankLabel = string.IsNullOrEmpty(value) ? "Rank" : value;
 
         if (ascensionButton != null)
         {
@@ -46,23 +46,16 @@ public class PlanetUI : MonoBehaviour
 
         var state = InfinitySystem.instance.URTS[planetIndex];
 
-        // 1. レベルとランクの表示更新 (多言語ラベル + 数値)
-        // 例: "Lv: 10 (Rank: 1)" -> "レベル: 10 (ランク: 1)" 
+        // 1. レベルとランクの表示更新
         levelText.text = $"{currentLevelLabel}: {state.level} ({currentRankLabel}: {state.ascensionCount})";
 
-        // 2. コストの表示更新 (多言語ラベル + フォーマット済み数値)
-        // 例: "Cost: 1.2k" -> "コスト: 1.2k"
-        double cost = state.GetCurrentCost();
+        // 2. コストの表示更新
+        double cost = state.CurrentCost;
         costText.text = $"{currentCostLabel}: {NumberFormatter.FormatNumber(cost, InfinitySystem.instance.notationType)}";
 
         // 購入ボタンの有効化判定
         buyButton.interactable = InfinitySystem.instance.CurrentScore >= cost;
         
-        if (state.Base_Speed >= 10.0)
-        {
-            fillImage.fillAmount = 1.0f;
-            return;
-        }
         fillImage.fillAmount = (float)state.progress;
 
         UpdateAscensionUI(state);
@@ -76,5 +69,6 @@ public class PlanetUI : MonoBehaviour
         bool canAscend = state.level >= targetLevel;
         
         ascensionButton.gameObject.SetActive(canAscend);
+
     }
 }

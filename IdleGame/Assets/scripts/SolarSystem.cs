@@ -57,15 +57,6 @@ public class SolarSystem : MonoBehaviour
                 // 非表示の場合は計算をスキップ
                 if (!shouldBeActive) continue;
 
-                // --- 速度による演出の分岐 ---
-                // Base_Speed が閾値を超えたら、位置を固定（または高速な微振動）にする
-                if (planetStatus.Base_Speed >= speedThreshold)
-                {
-                    // 真上の位置 (displayAngle = 90) に固定
-                    // これにより「速すぎて残像がその場に留まっている」ように見せます
-                    SetPlanetPosition(planet, 90f);
-                    continue;
-                }
 
                 // 通常時：progress (0.0 ～ 1.0) を 360度に変換
                 planet.currentAngle = (float)planetStatus.progress * 360f;

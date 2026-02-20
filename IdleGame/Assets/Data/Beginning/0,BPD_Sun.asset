@@ -15,8 +15,8 @@ MonoBehaviour:
   Planet_Name: Sun
   Planet_ID: 0
   Level: 0
-  Base_Cost: 7
-  Cost_Multiplier: 1.05
-  Ascension_Multiplier: 1.5
-  Base_Speed: 0.1
-  Base_Reward: 1
+  Base_Cost: 10
+  Cost_Multiplier: 1.07
+  Base_Speed: 0.9
+  Ascension_Multiplier: 1
+  Base_Reward: 2

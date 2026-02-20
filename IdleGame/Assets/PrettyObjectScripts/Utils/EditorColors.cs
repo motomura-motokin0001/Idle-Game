@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 public static class EditorColors
@@ -72,3 +73,4 @@ public static class EditorColors
         return selectionContainsObject ? windowIsFocused ? ObjectSelectedWindowFocusedText : ObjectSelectedText : Text;
     }
 }
+#endif

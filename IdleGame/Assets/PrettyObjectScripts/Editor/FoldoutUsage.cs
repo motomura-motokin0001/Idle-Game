@@ -1,4 +1,5 @@
-﻿/** To disable the foldout region - Comment the define's line **/
+﻿#if UNITY_EDITOR
+/** To disable the foldout region - Comment the define's line **/
 #define FOLDOUT
 
 using System.Collections;
@@ -70,3 +71,4 @@ public class FoldoutUsage : Editor
 
 }
 
+#endif

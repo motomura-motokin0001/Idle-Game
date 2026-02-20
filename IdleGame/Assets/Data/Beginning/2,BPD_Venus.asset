@@ -15,10 +15,8 @@ MonoBehaviour:
   Planet_Name: Venus
   Planet_ID: 2
   Level: 0
-  Base_Cost: 1000
-  Cost_Multiplier: 1.2
-  Base_Speed: 0.02
-  Base_Reward: 1
-  Reward_Exponent_Add: 0.6
-  Reward_Base_Value: 2
-  Ascension_Mult: 2
+  Base_Cost: 50000
+  Cost_Multiplier: 1.09
+  Base_Speed: 0.03
+  Ascension_Multiplier: 1
+  Base_Reward: 1000
